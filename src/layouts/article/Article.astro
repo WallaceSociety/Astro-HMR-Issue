@@ -1,0 +1,41 @@
+---
+import Page from '../Page.astro';
+import Header from '../common/header/Header.astro';
+import VideoSplit from '../../lib/containers/videoSplit/VideoSplit.astro';
+import MainContent from '../../lib/containers/mainContent/MainContent.astro';
+
+import Toc from '../../lib/toc/Toc.astro';
+import type { HeadingItemType } from '../../lib/toc/Toc.astro';
+
+export interface Frontmatter {
+  url: string; // Actually the path
+  title: string;
+  headings: HeadingItemType[];
+  goal: string;
+  goalUrl: string;
+  video: string;
+  podcast: string;
+}
+
+const { frontmatter, headings } = Astro.props;
+const { url, title, goal, goalUrl, video, podcast } = frontmatter as Frontmatter;
+const path = url; // For continuity with the other components
+---
+
+<Page title={title} googleAnalyticsId="Som G-Code" microsoftClairityId="Some M-Code">
+  <Header brandText="SkinCareSumo.com" taglineText="A Place For Beautiful Skin" />
+  <VideoSplit path={path} src={video} title={title} btnAText="Subscribe to Our Podcast" btnALink={podcast} btnBText={goal} btnBLink={goalUrl}>
+    <p>Goal Promo?</p>
+    <p>Podcast promo?</p>
+  </VideoSplit>
+  <MainContent variant="sidebar">
+
+    <Fragment slot="left">
+      <slot />
+    </Fragment>
+    <Fragment slot="right">
+      right
+      <Toc headings={headings} />
+    </Fragment>
+  </MainContent>
+</Page>

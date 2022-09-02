@@ -1,0 +1,32 @@
+---
+import tailwind from '../../tailwind';
+import structure from './style';
+import type { Variant, Structure } from './style';
+
+export interface Props {
+  variant?: Variant;
+  amendStyle?: { [key: string]: Structure };
+  overideStyle?: Structure;
+}
+const { variant = 'default', amendStyle, overideStyle } = Astro.props as Props;
+
+const { wrapper, leftWrapper, rightWrapper } = tailwind(structure, variant, amendStyle, overideStyle) as Structure;
+---
+
+{
+  variant === 'default' ? (
+    <main class={wrapper} data-class="wrapper">
+      <slot />
+    </main>
+  ) : (
+    <section class={wrapper} data-class="wrapper">
+      <div class={leftWrapper} data-class="leftWrapper">
+        <slot name="left" />
+      </div>
+      <div class={rightWrapper} data-class="rightWrapper">
+        right
+        <slot name="right" />
+      </div>
+    </section>
+  )
+}

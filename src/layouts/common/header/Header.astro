@@ -1,0 +1,51 @@
+---
+import tailwind from "../../../lib/tailwind";
+import structure from "./style";
+import type { Variant, Structure } from "./style";
+
+export interface Props {
+  brandText: string;
+  logoSrc?: string;
+  taglineText?: string;
+  variant?: Variant;
+  amendStyle?: { [key: string]: Structure };
+  overideStyle?: Structure;
+}
+const {
+  brandText,
+  logoSrc,
+  taglineText,
+  variant = "default",
+  amendStyle,
+  overideStyle,
+} = Astro.props as Props;
+
+const { wrapper, brandWrapper, homeLink, logo, brand, tagline } = tailwind(
+  structure,
+  variant,
+  amendStyle,
+  overideStyle
+) as Structure;
+---
+
+<header class={wrapper} data-class="wrappeer">
+  <div class={brandWrapper} data-class="brandWrapper">
+    <a href="/" class={homeLink} data-class="homeLink">
+      {!!logoSrc && <img src={logoSrc} class={logo} alt={brandText} />}
+      {
+        !logoSrc && (
+          <span class={brand} data-class="brand">
+            {brandText}
+          </span>
+        )
+      }
+      {
+        !!taglineText && (
+          <span class={tagline} data-class="tagline">
+            {taglineText}
+          </span>
+        )
+      }
+    </a>
+  </div>
+</header>

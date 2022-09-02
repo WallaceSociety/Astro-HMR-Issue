@@ -1,0 +1,52 @@
+---
+import tailwind from '../../../tailwind';
+import structure from './style';
+import type { Position, Variant, Structure } from './style';
+
+export interface Props {
+  id?: string;
+  image?: string;
+  alt?: string;
+  color?: string;
+  header?: string;
+  position?: Position;
+  variant?: Variant;
+  amendStyle?: { [key: string]: Structure };
+  overideStyle?: Structure;
+}
+const { id, image, alt, header, position, variant = 'default', amendStyle, overideStyle } = Astro.props as Props;
+
+const { wrapper, img, overlay, heading, columnWrapper, column } = tailwind(structure(position), variant, amendStyle, overideStyle) as Structure;
+---
+
+<div id={id} class={wrapper} data-class="wrapper">
+  {image && <img src={image} class={img} data-class="img" alt={alt} />}
+
+  <div class={overlay} data-class="overlay">
+    {
+      (Astro.slots.header || header) && (
+        <div class={heading} data-class="heading">
+          <slot name="header">{header}</slot>
+        </div>
+      )
+    }
+
+    <div class={columnWrapper} data-class="columnWrapper">
+      {
+        Astro.slots.left && (
+          <div class={column} data-class="column">
+            <slot name="left" />
+          </div>
+        )
+      }
+
+      {
+        Astro.slots.right && (
+          <div class={column} data-class="column">
+            <slot name="right" />
+          </div>
+        )
+      }
+    </div>
+  </div>
+</div>

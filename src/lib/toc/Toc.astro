@@ -1,0 +1,25 @@
+---
+export interface HeadingItemType {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+export interface Props {
+  headings: HeadingItemType[];
+}
+
+const { headings } = Astro.props;
+---
+<h1>Test</h1>
+{
+  headings && (
+    <ul>
+      {headings.map((headingItem) => (
+        <li>
+          <a href={`#${headingItem.slug}`}>{headingItem.text}</a>
+        </li>
+      ))}
+    </ul>
+  )
+}

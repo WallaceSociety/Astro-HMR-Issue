@@ -1,0 +1,137 @@
+---
+import tailwind from "../../../lib/tailwind";
+import structure from "./style";
+import type { Variant, Structure } from "./style";
+
+import ColumnHalf from "../../../lib/containers/columns/half/ColumnHalf.astro";
+import IconBox from "../../../lib/buttons/iconBox/IconBox.astro";
+
+export interface Props {
+  brandText: string;
+  logoSrc?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  variant?: Variant;
+  amendStyle?: { [key: string]: Structure };
+  overideStyle?: Structure;
+}
+
+const {
+  brandText,
+  logoSrc,
+  phone,
+  email,
+  address,
+  variant = "default",
+  amendStyle,
+  overideStyle,
+} = Astro.props as Props;
+
+const date = new Date();
+const year = date.getFullYear();
+
+const {
+  wrapper,
+  liner,
+  column,
+  left,
+  brandLink,
+  logo,
+  brand,
+  subheading,
+  text,
+  aboutWrapper,
+  right,
+  nestedLeft,
+  nestedRight,
+  copyrightWrapper,
+  copyright,
+} = tailwind(structure, variant, amendStyle, overideStyle) as Structure;
+---
+
+<footer class={wrapper} data-class="wrapper">
+  <div class={liner} data-class="liner">
+    <ColumnHalf amendStyle={{ amend: { column: column } }}>
+      <div slot="left" class={left} data-class="left">
+        <a href="/" class={brandLink} data-class="brandLink">
+          <svg
+            class="w-8"
+            viewBox="0 0 24 24"
+            stroke-linejoin="round"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-miterlimit="10"
+            stroke="rgb(254 215 170)"
+            fill="none"
+          >
+            <rect x="3" y="1" width="7" height="12"></rect>
+            <rect x="3" y="17" width="7" height="6"></rect>
+            <rect x="14" y="1" width="7" height="6"></rect>
+            <rect x="14" y="11" width="7" height="12"></rect>
+          </svg>
+          {!!logoSrc && <img src={logoSrc} class={logo} alt={brandText} />}
+          {
+            !logoSrc && (
+              <span class={brand} data-class="brand">
+                {brandText}
+              </span>
+            )
+          }
+        </a>
+        <div class={aboutWrapper} data-class="aboutWrapper">
+          <p class={text} data-class="text">
+            Since 2019, Skincare Sumo has been tracking down the best research
+            that science has to offer. Having good information will help you
+            choose the right routines and products to reach your skincare goals.
+          </p>
+        </div>
+      </div>
+      <div slot="right" class={right} data-class="right">
+        <ColumnHalf>
+          <div slot="left" class={nestedLeft} data-clas="nestedLeft">
+            <h4 class={subheading} data-class="subheading">Contacts</h4>
+            <p class={text} data-class="text">
+              Phone: {phone}<br />
+              Email: {email}
+              <br />
+              Address: {address}
+            </p>
+          </div>
+          <div slot="right" class={nestedRight} data-clas="nestedRight">
+            <IconBox
+              headingText="Let's Be Social"
+              icons={[
+                {
+                  name: "Facebook",
+                  href: "https://www.facebook.com/skincaresumo/",
+                  icon: "facebook",
+                },
+                {
+                  name: "Instagram",
+                  href: "https://www.instagram.com/skincaresumo/",
+                  icon: "instagram",
+                },
+                {
+                  name: "Reddit",
+                  href: "https://reddit.com/skincaresumo",
+                  icon: "reddit",
+                },
+                {
+                  name: "YouTube",
+                  href: "https://m.youtube.com/channel/UCzCL2d5e3Km7zIk1cWlRZyQ?sub_confirmation=1",
+                  icon: "youtube",
+                },
+              ]}
+            >
+              Be sure to follow us on social media!
+            </IconBox>
+          </div>
+        </ColumnHalf>
+      </div>
+    </ColumnHalf>
+    <div class={copyrightWrapper}>
+      <p class={copyright}>© Copyright {year}&nbsp;{brandText}</p>
+    </div>
+  </div>
+</footer>

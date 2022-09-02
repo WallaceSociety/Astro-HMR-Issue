@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+a.icon {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.icon::before {
+  content: '';
+  display: inline-block;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  width: 25px;
+  height: 25px;
+  background-color: darkgoldenrod;
+
+  /* Browser Specific =========== */
+  -webkit-mask-repeat: no-repeat !important;
+  -webkit-mask-position: center !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-mask-repeat: no-repeat !important;
+  -moz-osx-mask-position: center !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}

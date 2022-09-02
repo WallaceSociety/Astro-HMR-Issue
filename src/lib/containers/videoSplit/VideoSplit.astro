@@ -1,0 +1,65 @@
+---
+import tailwind from '../../tailwind';
+import structure from './style';
+import type { Variant, Structure } from './style';
+
+import ColumnHalf from '../columns/half/ColumnHalf.astro';
+import Buttons from './buttons/Buttons.svelte';
+
+export interface Props {
+  path: string; // URL path of page where this widget is used
+  src: string;
+  title: string;
+  autoplay?: boolean;
+  playlist?: string;
+  btnAText: string;
+  btnALink: string;
+  btnBText: string;
+  btnBLink: string;
+  variant?: Variant;
+  amendStyle?: { [key: string]: Structure };
+  overideStyle?: Structure;
+}
+const { path, src, title, autoplay = false, playlist, btnAText, btnALink, btnBText, btnBLink, variant = 'default', amendStyle, overideStyle } = Astro.props as Props;
+
+const domain = 'https://www.skincaresumo.com'; // TODO this should be a global variable
+
+const embedVideoSrc = (src: string, path: string) => {
+  const embedVideoSrc = src.split('?');
+  embedVideoSrc[0] = embedVideoSrc[0].replace('watch?v=', 'embed/');
+  embedVideoSrc[0] = embedVideoSrc[0].replace('shorts/', 'embed/');
+  embedVideoSrc[0] = embedVideoSrc[0].replace('youtu.be/', 'embed/');
+
+  const embedOptions = []; // Remove Any Passed Options
+  embedOptions.push('autoplay=' + (autoplay ? '1' : '0'));
+  embedOptions.push('controls=0');
+  embedOptions.push('listType=playlist');
+  embedOptions.push('loop=0');
+  embedOptions.push('modestbranding=1');
+  embedOptions.push('playsinline=0');
+  embedOptions.push('rel=0');
+  embedOptions.push('origin=' + domain);
+  embedOptions.push('widget_referrer=' + domain + path);
+
+  embedVideoSrc[1] = embedOptions.join('&');
+  return embedVideoSrc.join('?');
+};
+
+const { wrapper, liner, textColumn, buttonWrapper, videoColumn, video } = tailwind(structure, variant, amendStyle, overideStyle) as Structure;
+---
+
+<div class={wrapper} data-class="wrapper">
+  <div class={liner} data-class="liner">
+    <ColumnHalf>
+      <div class={textColumn} data-class="textColumn" slot="left">
+        <slot />
+        <div class={buttonWrapper} data-class="buttonWrapper">
+          <Buttons btnA={btnAText} btnALink={btnALink} btnB={btnBText} btnBLink={btnBLink} client:visible />
+        </div>
+      </div>
+      <div class={videoColumn} data-class="videoColumn" slot="right">
+        <iframe class={video} src={embedVideoSrc(src, path)} title={title} frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </ColumnHalf>
+  </div>
+</div>
